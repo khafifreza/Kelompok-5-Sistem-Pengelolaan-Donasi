@@ -14,3 +14,4 @@ Route::post('/register', [AuthController::class, 'processRegister'])->name('regi
 
 Route::get('/program', [ProgramController::class, 'index'])->name('program.index');
 Route::get('/program/{id}', [ProgramController::class, 'show'])->name('program.show');
+Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
