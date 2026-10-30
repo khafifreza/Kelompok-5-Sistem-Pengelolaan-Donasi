@@ -1,5 +1,8 @@
+
+<!-- Logo Laravel ditampilkan di bagian tengah halaman -->
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
+<!-- Menampilkan informasi status build, jumlah unduhan, versi terbaru, dan lisensi Laravel -->
 <p align="center">
 <a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
@@ -9,8 +12,11 @@
 
 ## About Laravel
 
+<!-- Bagian ini menjelaskan pengertian Laravel dan fitur-fitur utama yang disediakan oleh framework Laravel -->
+
 Laravel, is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
+<!-- Daftar fitur utama Laravel yang membantu proses pengembangan aplikasi web -->
 - [Simple, fast routing engine](https://laravel.com/docs/routing).
 - [Powerful dependency injection container](https://laravel.com/docs/container).
 - Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
@@ -19,40 +25,53 @@ Laravel, is a web application framework with expressive, elegant syntax. We beli
 - [Robust background job processing](https://laravel.com/docs/queues).
 - [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
+<!-- Laravel menyediakan berbagai fitur untuk membangun aplikasi berskala kecil hingga besar -->
 Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
 ## Learning Laravel
 
+<!-- Bagian ini berisi referensi pembelajaran Laravel melalui dokumentasi resmi dan platform tutorial -->
 Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
 
+<!-- Laracasts menyediakan video pembelajaran mengenai Laravel, PHP, pengujian aplikasi, dan JavaScript -->
 In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
+<!-- Laravel Learn menyediakan materi pembelajaran singkat berbasis proyek nyata -->
 You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
 
 ## Agentic Development
 
+<!-- Bagian ini menjelaskan penggunaan AI coding agent untuk membantu proses pengembangan aplikasi Laravel -->
 Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
 
+<!-- Perintah untuk memasang Laravel Boost sebagai dependensi pengembangan -->
 ```bash
+# Memasang Laravel Boost sebagai dependensi development menggunakan Composer
 composer require laravel/boost --dev
 
+# Menjalankan instalasi Laravel Boost melalui Artisan
 php artisan boost:install
 ```
 
+<!-- Laravel Boost menyediakan berbagai tools dan skills untuk membantu AI agent mengikuti standar pengembangan Laravel -->
 Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
 
 ## Contributing
 
+<!-- Bagian ini memberikan informasi mengenai cara berkontribusi dalam pengembangan framework Laravel -->
 Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
 
 ## Code of Conduct
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+<!-- Bagian ini menjelaskan pedoman perilaku yang harus dipatuhi oleh komunitas Laravel -->
+Thank you for considering contributing to the Laravel framework! Please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 
 ## Security Vulnerabilities
 
+<!-- Bagian ini menjelaskan prosedur pelaporan apabila ditemukan celah keamanan pada framework Laravel -->
 If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
 ## License
 
+<!-- Bagian ini menjelaskan lisensi MIT yang digunakan oleh framework Laravel -->
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
