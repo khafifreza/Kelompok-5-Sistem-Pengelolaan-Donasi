@@ -1,4 +1,4 @@
-@extends('layouts.dashboard')
+@extends('layouts.donatur')
 @section('title', 'Donatur')
 @section('content')
 <section class="dashboard-section">
