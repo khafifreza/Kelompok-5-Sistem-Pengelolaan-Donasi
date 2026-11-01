@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+
 </head>
 <body>
 
@@ -21,12 +23,36 @@
             </a>
         </div>
         <ul class="sidebar-menu">
-            <li><a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}"><i class="bi bi-house"></i> Dashboard</a></li>
-            <li><a href="#"><i class="bi bi-wallet2"></i> Donasi Masuk <span class="badge-notification">5</span></a></li>
-            <li><a href="#"><i class="bi bi-grid"></i> Kelola Program</a></li>
-            <li><a href="#"><i class="bi bi-send"></i> Penyaluran Bantuan</a></li>
-            <li><a href="#"><i class="bi bi-people"></i> Data Donatur</a></li>
-            <li><a href="#"><i class="bi bi-file-earmark-text"></i> Laporan</a></li>
+            <li>
+                <a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                    <i class="bi bi-house"></i> Dashboard
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('admin.donasi') }}" class="{{ request()->routeIs('admin.donasi') ? 'active' : '' }}">
+                    <i class="bi bi-wallet2"></i> Donasi Masuk <span class="badge-notification">5</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('admin.program') }}" class="{{ request()->routeIs('admin.program') ? 'active' : '' }}">
+                    <i class="bi bi-grid"></i> Kelola Program
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('admin.penyaluran') }}" class="{{ request()->routeIs('admin.penyaluran') ? 'active' : '' }}">
+                    <i class="bi bi-send"></i> Penyaluran Bantuan
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('admin.donatur') }}" class="{{ request()->routeIs('admin.donatur') ? 'active' : '' }}">
+                    <i class="bi bi-people"></i> Data Donatur
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('admin.laporan') }}" class="{{ request()->routeIs('admin.laporan') ? 'active' : '' }}">
+                    <i class="bi bi-file-earmark-text"></i> Laporan
+                </a>
+            </li>
         </ul>
     </div>
 

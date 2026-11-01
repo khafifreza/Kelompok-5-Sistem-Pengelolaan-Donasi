@@ -1,0 +1,174 @@
+@extends('layouts.admin')
+@section('title', 'Donasi Masuk')
+
+@section('content')
+<div class="page-header-custom">
+    <div>
+        <div class="breadcrumb-custom">Manajemen Keuangan</div>
+        <h1 class="page-title">Donasi & Penyaluran</h1>
+        <p class="page-subtitle">Konfirmasi donasi masuk dan catat setiap bantuan yang disalurkan.</p>
+    </div>
+    <a href="#" class="btn btn-outline-custom"><i class="bi bi-download"></i> Ekspor Laporan</a>
+</div>
+
+<!-- Tabs -->
+<div class="tabs-custom">
+    <a href="{{ route('admin.donasi') }}" class="tab-item active">Donasi Masuk <span class="tab-count">2</span></a>
+    <a href="{{ route('admin.penyaluran') }}" class="tab-item">Penyaluran Bantuan</a>
+</div>
+
+<!-- Donasi Masuk -->
+<div class="content-card">
+    <div class="card-header-custom">
+        <div>
+            <h5 class="card-title">Donasi Masuk</h5>
+            <p class="card-subtitle">Transaksi donasi terbaru dari seluruh program.</p>
+        </div>
+        <div class="search-box">
+            <i class="bi bi-search"></i>
+            <input type="text" placeholder="Cari donatur...">
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table admin-table">
+            <thead>
+                <tr>
+                    <th>Nama Donatur</th>
+                    <th>Program</th>
+                    <th>Nominal</th>
+                    <th>Tanggal</th>
+                    <th>Status & Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Andi Pratama</strong></td>
+                    <td>Pendidikan Anak Pelosok</td>
+                    <td><strong>Rp 1.500.000</strong></td>
+                    <td>24 Jun 2025</td>
+                    <td><button class="btn btn-primary btn-sm">Konfirmasi Pembayaran</button></td>
+                </tr>
+                <tr>
+                    <td><strong>Hamba Allah</strong></td>
+                    <td>Paket Pangan Keluarga</td>
+                    <td><strong>Rp 500.000</strong></td>
+                    <td>24 Jun 2025</td>
+                    <td><button class="btn btn-primary btn-sm">Konfirmasi Pembayaran</button></td>
+                </tr>
+                <tr>
+                    <td><strong>Sarah Wijaya</strong></td>
+                    <td>Layanan Kesehatan Desa</td>
+                    <td><strong>Rp 2.000.000</strong></td>
+                    <td>23 Jun 2025</td>
+                    <td><span class="status-badge berhasil"><i class="bi bi-check-circle-fill"></i> Terkonfirmasi</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Budi Santoso</strong></td>
+                    <td>Air Bersih untuk NTT</td>
+                    <td><strong>Rp 750.000</strong></td>
+                    <td>22 Jun 2025</td>
+                    <td><span class="status-badge berhasil"><i class="bi bi-check-circle-fill"></i> Terkonfirmasi</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Catat Penyaluran & Riwayat -->
+<div class="row g-4 mt-2">
+    <div class="col-md-7">
+        <div class="content-card">
+            <div class="card-header-custom">
+                <div>
+                    <h5 class="card-title">Catat Penyaluran</h5>
+                    <p class="card-subtitle">Lengkapi detail bantuan dan bukti penyaluran.</p>
+                </div>
+            </div>
+            <div class="form-group-custom">
+                <label>Penerima Bantuan</label>
+                <select class="form-control-custom">
+                    <option>Pilih penerima terverifikasi</option>
+                    <option>Siti Rahmawati</option>
+                    <option>Budi Santoso</option>
+                    <option>Nur Aisyah</option>
+                </select>
+            </div>
+            <div class="form-row-custom">
+                <div class="form-group-custom">
+                    <label>Bentuk Bantuan</label>
+                    <input type="text" class="form-control-custom" placeholder="Contoh: Paket sembako">
+                </div>
+                <div class="form-group-custom">
+                    <label>Nilai Bantuan</label>
+                    <div class="input-with-rp">
+                        <span class="rp-prefix">Rp</span>
+                        <input type="number" placeholder="0">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group-custom">
+                <label>Keterangan</label>
+                <textarea class="form-control-custom textarea-custom" placeholder="Tuliskan detail penyaluran..."></textarea>
+            </div>
+            <div class="form-group-custom">
+                <label>Foto Bukti</label>
+                <div class="upload-area">
+                    <i class="bi bi-image"></i>
+                    <div>
+                        <strong>Unggah foto dokumentasi</strong>
+                        <small>JPG atau PNG, maks. 5MB</small>
+                    </div>
+                </div>
+            </div>
+            <button class="btn-submit-program">
+                Simpan Penyaluran <i class="bi bi-send"></i>
+            </button>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div class="content-card">
+            <div class="card-header-custom">
+                <div>
+                    <h5 class="card-title">Riwayat Terbaru</h5>
+                    <p class="card-subtitle">Penyaluran 30 hari terakhir.</p>
+                </div>
+            </div>
+            <div class="riwayat-list">
+                <div class="riwayat-item">
+                    <div class="riwayat-img" style="background: linear-gradient(135deg, #e8f5f0, #d4f1e8);">
+                        <i class="bi bi-box-seam"></i>
+                    </div>
+                    <div class="riwayat-content">
+                        <strong>Siti Rahmawati</strong>
+                        <small>Paket sembako • Rp 750.000</small>
+                        <span class="riwayat-date">22 Juni 2025</span>
+                    </div>
+                    <i class="bi bi-chevron-right riwayat-arrow"></i>
+                </div>
+                <div class="riwayat-item">
+                    <div class="riwayat-img" style="background: linear-gradient(135deg, #fff3cd, #ffe69c);">
+                        <i class="bi bi-book"></i>
+                    </div>
+                    <div class="riwayat-content">
+                        <strong>Yusuf Kurnia</strong>
+                        <small>Biaya pendidikan • Rp 1.200.000</small>
+                        <span class="riwayat-date">22 Juni 2025</span>
+                    </div>
+                    <i class="bi bi-chevron-right riwayat-arrow"></i>
+                </div>
+                <div class="riwayat-item">
+                    <div class="riwayat-img" style="background: linear-gradient(135deg, #e3f2fd, #bbdefb);">
+                        <i class="bi bi-heart-pulse"></i>
+                    </div>
+                    <div class="riwayat-content">
+                        <strong>Maya Lestari</strong>
+                        <small>Bantuan kesehatan • Rp 2.500.000</small>
+                        <span class="riwayat-date">22 Juni 2025</span>
+                    </div>
+                    <i class="bi bi-chevron-right riwayat-arrow"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection

@@ -22,5 +22,12 @@ Route::get('/register', [AuthController::class, 'showRegister'])->name('register
 Route::post('/register', [AuthController::class, 'processRegister'])->name('register.process');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Admin Routes
-Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
+// Route Admin 
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', [App\Http\Controllers\AdminController::class, 'index'])->name('dashboard');
+    Route::get('/donasi', [App\Http\Controllers\AdminController::class, 'donasi'])->name('donasi');
+    Route::get('/program', [App\Http\Controllers\AdminController::class, 'program'])->name('program');
+    Route::get('/penyaluran', [App\Http\Controllers\AdminController::class, 'penyaluran'])->name('penyaluran');
+    Route::get('/donatur', [App\Http\Controllers\AdminController::class, 'donatur'])->name('donatur');
+    Route::get('/laporan', [App\Http\Controllers\AdminController::class, 'laporan'])->name('laporan');
+});
