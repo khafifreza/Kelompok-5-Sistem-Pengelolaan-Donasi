@@ -10,6 +10,28 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+## Backend Donasi
+
+Backend menyimpan akun donatur, program, dan transaksi donasi di database. Untuk
+membuat tabel dan mengisi program awal:
+
+```bash
+php artisan migrate --seed
+```
+
+Donasi baru berstatus `pending`. Admin yang sudah login dapat mengubahnya menjadi
+`success` atau `failed`; konfirmasi pembayaran otomatis mencatat waktu `paid_at`.
+Akun yang mendaftar mendapat peran `donor`. Untuk memberi akses admin, daftarkan
+akun terlebih dahulu, lalu ubah perannya melalui Tinker:
+
+```bash
+php artisan tinker --execute="App\Models\User::where('email', 'admin@example.com')->update(['role' => 'admin']);"
+```
+
+Rute dashboard donatur memerlukan login. Semua rute di bawah `/admin` memerlukan
+login dan peran admin. Integrasi payment gateway belum tersedia; status donasi
+perlu diperbarui oleh admin.
+
 ## About Laravel
 
 <!-- Bagian ini menjelaskan pengertian Laravel dan fitur-fitur utama yang disediakan oleh framework Laravel -->

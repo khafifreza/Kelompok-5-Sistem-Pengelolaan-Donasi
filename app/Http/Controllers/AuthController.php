@@ -30,8 +30,11 @@ class AuthController extends Controller
         }
 
         $request->session()->regenerate();
+        $user = $request->user();
 
-        return redirect()->intended(route('home'))->with('success', 'Login berhasil!');
+        $destination = $user->isAdmin() ? route('admin.dashboard') : route('home');
+
+        return redirect()->intended($destination)->with('success', 'Login berhasil!');
     }
 
     public function showRegister()
