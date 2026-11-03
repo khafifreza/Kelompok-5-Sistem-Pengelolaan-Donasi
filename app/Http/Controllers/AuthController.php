@@ -32,7 +32,7 @@ class AuthController extends Controller
         $request->session()->regenerate();
         $user = $request->user();
 
-        $destination = $user->isAdmin() ? route('admin.dashboard') : route('home');
+        $destination = $user->isAdmin() ? route('admin.dashboard') : route('dashboard');
 
         return redirect()->intended($destination)->with('success', 'Login berhasil!');
     }
@@ -58,7 +58,10 @@ class AuthController extends Controller
         // Password otomatis di-hash oleh cast 'hashed' pada model User.
         User::create($validated);
 
-        return redirect()->route('login')->with('success', 'Pendaftaran berhasil!');
+        return redirect()
+            ->route('home')
+            ->with('open_modal', 'loginModal')
+            ->with('success', 'Pendaftaran berhasil. Silakan masuk dengan akun Anda.');
     }
 
     public function logout(Request $request)

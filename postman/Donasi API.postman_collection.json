@@ -1,0 +1,46 @@
+{
+  "info": {
+    "_postman_id": "b84a97df-37a2-4c54-9f8c-bb6f840db6a5",
+    "name": "API Program Donasi",
+    "description": "Request publik untuk mencoba API program donasi.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://127.0.0.1:8000"
+    },
+    {
+      "key": "programId",
+      "value": "1"
+    }
+  ],
+  "item": [
+    {
+      "name": "Daftar program aktif",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/programs"
+      }
+    },
+    {
+      "name": "Detail program",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/programs/{{programId}}"
+      }
+    }
+  ]
+}

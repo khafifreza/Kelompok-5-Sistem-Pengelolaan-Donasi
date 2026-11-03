@@ -22,8 +22,17 @@
                 <a href="#transparansi">Transparansi</a>
             </div>
             <div class="nav-actions">
-                <button class="btn btn-ghost" onclick="openModal('loginModal')">Login</button>
-                <button class="btn btn-primary" onclick="openModal('registerModal')">Daftar</button>
+                @auth
+                    <a class="btn btn-ghost" href="{{ auth()->user()->isAdmin() ? route('admin.dashboard') : route('dashboard') }}">Dashboard</a>
+                    <span>{{ auth()->user()->name }}</span>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button class="btn btn-primary" type="submit">Logout</button>
+                    </form>
+                @else
+                    <button class="btn btn-ghost" onclick="openModal('loginModal')">Login</button>
+                    <button class="btn btn-primary" onclick="openModal('registerModal')">Daftar</button>
+                @endauth
             </div>
         </div>
     </nav>
@@ -58,9 +67,18 @@
             </div>
             <form method="POST" action="{{ route('login.process') }}">
                 @csrf
+                <input type="hidden" name="_form" value="login">
+                @if(old('_form') === 'login')
+                    @foreach($errors->all() as $error)
+                        <div class="alert alert-danger" role="alert">{{ $error }}</div>
+                    @endforeach
+                @endif
+                @if(session('success'))
+                    <div class="alert alert-success" role="status">{{ session('success') }}</div>
+                @endif
                 <div class="form-group">
                     <label>Email</label>
-                    <input type="email" name="email" required placeholder="nama@email.com">
+                    <input type="email" name="email" value="{{ old('email') }}" required placeholder="nama@email.com">
                 </div>
                 <div class="form-group">
                     <label>Kata Sandi</label>
@@ -94,17 +112,23 @@
 
             <form method="POST" action="{{ route('register.process') }}">
                 @csrf
+                <input type="hidden" name="_form" value="register">
+                @if(old('_form') === 'register')
+                    @foreach($errors->all() as $error)
+                        <div class="alert alert-danger" role="alert">{{ $error }}</div>
+                    @endforeach
+                @endif
                 <div class="form-group">
                     <label>Nama Lengkap</label>
-                    <input type="text" name="name" required placeholder="Contoh: Andi Pratama">
+                    <input type="text" name="name" value="{{ old('name') }}" required placeholder="Contoh: Andi Pratama">
                 </div>
                 <div class="form-group">
                     <label>E-mail</label>
-                    <input type="email" name="email" required placeholder="nama@email.com">
+                    <input type="email" name="email" value="{{ old('email') }}" required placeholder="nama@email.com">
                 </div>
                 <div class="form-group">
                     <label>No. WhatsApp</label>
-                    <input type="tel" name="phone" required placeholder="0812 3456 7890">
+                    <input type="tel" name="phone" value="{{ old('phone') }}" required placeholder="0812 3456 7890">
                 </div>
                 <div class="form-group">
                     <label>Kata Sandi</label>
@@ -141,6 +165,11 @@
                 }
             });
         });
+        @if(session('open_modal'))
+            window.addEventListener('DOMContentLoaded', () => openModal(@json(session('open_modal'))));
+        @elseif($errors->any())
+            window.addEventListener('DOMContentLoaded', () => openModal(@json(old('_form') === 'register' ? 'registerModal' : 'loginModal')));
+        @endif
     </script>
 </body>
 </html>

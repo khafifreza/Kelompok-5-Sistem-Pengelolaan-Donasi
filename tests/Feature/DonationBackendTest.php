@@ -58,7 +58,7 @@ class DonationBackendTest extends TestCase
             'email' => 'baru@example.com',
             'phone' => '081234567890',
             'password' => 'rahasia123',
-        ])->assertRedirect(route('login'));
+        ])->assertRedirect(route('home'));
 
         $user = User::where('email', 'baru@example.com')->firstOrFail();
 

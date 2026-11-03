@@ -23,16 +23,24 @@
         </div>
         <div class="nav-actions">
             <div class="user-profile">
-                <span class="avatar">AP</span>
-                <div><strong>Andi Pratama</strong><small>Donatur</small></div>
+                <span class="avatar">{{ strtoupper(substr(auth()->user()->name, 0, 2)) }}</span>
+                <div><strong>{{ auth()->user()->name }}</strong><small>Donatur</small></div>
                 <i class="bi bi-chevron-right"></i>
             </div>
-            <a href="{{ route('home') }}" class="btn-logout" title="Logout"><i class="bi bi-box-arrow-right"></i></a>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="btn-logout" title="Logout" aria-label="Logout"><i class="bi bi-box-arrow-right"></i></button>
+            </form>
         </div>
     </div>
 </nav>
 
-<main>@yield('content')</main>
+<main>
+    @if(session('success'))
+        <div class="wrap alert alert-success mt-3" role="status">{{ session('success') }}</div>
+    @endif
+    @yield('content')
+</main>
 
 <!-- MODAL DONASI -->
 <div class="modal-overlay" id="donasiModal">

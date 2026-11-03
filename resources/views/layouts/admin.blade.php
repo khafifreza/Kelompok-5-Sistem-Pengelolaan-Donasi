@@ -64,17 +64,24 @@
                 <div class="date-display" style="font-size: 13px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">
                     {{ \Carbon\Carbon::now()->locale('id')->isoFormat('dddd, D MMMM YYYY') }}
                 </div>
-                <h1 class="page-title">Selamat pagi, Rizky Admin</h1>
+                <h1 class="page-title">Selamat datang, {{ auth()->user()->name }}</h1>
             </div>
             <div class="user-profile-admin">
                 <div class="user-info-admin text-end">
-                    <strong>Rizky Admin</strong>
-                    <small>Super Admin</small>
+                    <strong>{{ auth()->user()->name }}</strong>
+                    <small>Admin</small>
                 </div>
-                <div class="user-avatar">RA</div>
+                <div class="user-avatar">{{ strtoupper(substr(auth()->user()->name, 0, 2)) }}</div>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="btn btn-ghost btn-sm">Logout</button>
+                </form>
             </div>
         </div>
 
+        @if(session('success'))
+            <div class="alert alert-success" role="status">{{ session('success') }}</div>
+        @endif
         @yield('content')
 
         <div class="text-center mt-5 mb-3">
