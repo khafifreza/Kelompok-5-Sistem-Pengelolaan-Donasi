@@ -82,11 +82,10 @@
         @if(session('success'))
             <div class="alert alert-success" role="status">{{ session('success') }}</div>
         @endif
+        @if(session('error'))
+            <div class="alert alert-danger" role="alert">{{ session('error') }}</div>
+        @endif
         @yield('content')
-
-        <div class="text-center mt-5 mb-3">
-            <a href="/" class="btn btn-ghost btn-sm"><i class="bi bi-box-arrow-left"></i> Kembali ke Beranda</a>
-        </div>
     </div>
 </div>
 

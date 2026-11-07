@@ -17,7 +17,7 @@ Route::post('/program/{id}/donasi', [DonationController::class, 'store'])->name(
 
 // Auth
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-Route::post('/login', [AuthController::class, 'processLogin'])->name('login.process');
+Route::post('/login', [AuthController::class, 'processLogin'])->middleware('throttle:login')->name('login.process');
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
 Route::post('/register', [AuthController::class, 'processRegister'])->name('register.process');
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
@@ -34,5 +34,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::get('/laporan', [AdminController::class, 'laporan'])->name('laporan');
     Route::post('/program', [AdminController::class, 'storeProgram'])->name('programs.store');
     Route::put('/program/{program}', [AdminController::class, 'updateProgram'])->name('programs.update');
+    Route::delete('/program/{program}', [AdminController::class, 'destroyProgram'])->name('programs.destroy');
     Route::patch('/donasi/{donation}', [AdminController::class, 'updateDonation'])->name('donations.update');
 });

@@ -51,36 +51,59 @@
         
         <form method="POST" action="{{ route('donasi.store', $program['id']) }}">
             @csrf
+            <input type="hidden" name="_form" value="donation">
+            @if(old('_form') === 'donation' && $errors->any())
+                <div class="alert alert-danger" role="alert">
+                    <p class="mb-1">Periksa kembali data donasi Anda:</p>
+                    <ul class="mb-0">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
             <div class="form-group">
                 <label>Nominal Donasi (Rp)</label>
                 <div class="input-with-prefix">
                     <span class="prefix">Rp</span>
-                    <input type="text" name="amount" id="donasiAmount" value="100.000" required>
+                    <input type="text" name="amount" id="donasiAmount" value="{{ old('amount', '100.000') }}" aria-describedby="donation-amount-error" required>
                 </div>
                 <small class="form-hint">Minimal Rp 10.000</small>
+                @error('amount')
+                    <small class="text-danger" id="donation-amount-error" role="alert">{{ $message }}</small>
+                @enderror
             </div>
 
             @guest
             <div class="form-group">
                 <label>Nama Donatur</label>
-                <input type="text" name="donor_name" required placeholder="Nama Anda">
+                <input type="text" name="donor_name" value="{{ old('donor_name') }}" required placeholder="Nama Anda">
+                @error('donor_name')
+                    <small class="text-danger" role="alert">{{ $message }}</small>
+                @enderror
             </div>
             <div class="form-group">
                 <label>Email</label>
-                <input type="email" name="donor_email" required placeholder="email@contoh.com">
+                <input type="email" name="donor_email" value="{{ old('donor_email') }}" required placeholder="email@contoh.com">
+                @error('donor_email')
+                    <small class="text-danger" role="alert">{{ $message }}</small>
+                @enderror
             </div>
             @endguest
 
             <div class="form-group">
                 <label class="checkbox-label-custom">
-                    <input type="checkbox" name="is_anonymous" value="1">
+                    <input type="checkbox" name="is_anonymous" value="1" @checked(old('is_anonymous'))>
                     <span>Sembunyikan nama saya (Hamba Allah)</span>
                 </label>
             </div>
 
             <div class="form-group">
                 <label>Pesan/Doa (Opsional)</label>
-                <textarea name="message" class="form-select-custom" rows="3" placeholder="Tuliskan pesan atau doa..."></textarea>
+                <textarea name="message" class="form-select-custom" rows="3" placeholder="Tuliskan pesan atau doa...">{{ old('message') }}</textarea>
+                @error('message')
+                    <small class="text-danger" role="alert">{{ $message }}</small>
+                @enderror
             </div>
 
             <button type="submit" class="modal-btn">Lanjutkan Pembayaran <i class="bi bi-arrow-right"></i></button>

@@ -6,129 +6,96 @@
     <div>
         <div class="breadcrumb-custom">Manajemen Program</div>
         <h1 class="page-title">Kelola Program Donasi</h1>
-        <p class="page-subtitle">Buat, edit, dan kelola semua program penggalangan dana.</p>
+        <p class="page-subtitle">Buat, edit, cari, dan ubah status program penggalangan dana.</p>
     </div>
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalBuatProgram">
         <i class="bi bi-plus"></i> Buat Program
     </button>
 </div>
 
-<!-- Search & Filter -->
 <div class="content-card">
-    <div class="card-header-custom">
+    <form method="GET" action="{{ route('admin.program') }}" class="card-header-custom">
         <div class="search-box" style="flex: 1; max-width: 400px;">
             <i class="bi bi-search"></i>
-            <input type="text" placeholder="Cari program...">
+            <input type="search" name="q" value="{{ $search }}" placeholder="Cari nama program..." aria-label="Cari program">
         </div>
         <div class="filter-group">
-            <select class="form-control-custom" style="width: auto;">
-                <option>Semua Kategori</option>
-                <option>Pendidikan</option>
-                <option>Kesehatan</option>
-                <option>Kemanusiaan</option>
+            <select class="form-control-custom" name="category" aria-label="Filter kategori">
+                <option value="">Semua Kategori</option>
+                @foreach($categories as $programCategory)
+                    <option value="{{ $programCategory }}" @selected($category === $programCategory)>{{ $programCategory }}</option>
+                @endforeach
             </select>
-            <select class="form-control-custom" style="width: auto;">
-                <option>Semua Status</option>
-                <option>Aktif</option>
-                <option>Selesai</option>
-                <option>Draft</option>
+            <select class="form-control-custom" name="status" aria-label="Filter status">
+                <option value="">Semua Status</option>
+                <option value="active" @selected($status === 'active')>Aktif</option>
+                <option value="closed" @selected($status === 'closed')>Ditutup</option>
             </select>
+            <button type="submit" class="btn btn-outline-custom">Filter</button>
+            @if($search !== '' || $category !== '' || $status !== '')
+                <a class="btn btn-ghost" href="{{ route('admin.program') }}">Reset</a>
+            @endif
         </div>
+    </form>
+
+    <div class="program-admin-list">
+        @forelse($programs as $program)
+            <article class="program-admin-item">
+                <div class="program-admin-img">
+                    @if($program->image)
+                        <img src="{{ $program->image }}" alt="" style="width: 100%; height: 100%; object-fit: cover;">
+                    @else
+                        <i class="bi bi-heart"></i>
+                    @endif
+                </div>
+                <div class="program-admin-info">
+                    <h4>{{ $program->title }}</h4>
+                    <div class="program-admin-meta">
+                        <span class="badge-category">{{ $program->category }}</span>
+                        @if($program->status === 'active')
+                            <span class="status-badge berhasil">Aktif</span>
+                        @else
+                            <span class="badge text-bg-secondary">Ditutup</span>
+                        @endif
+                        <span><i class="bi bi-people"></i> {{ $program->donations_count }} donasi</span>
+                    </div>
+                    <div class="program-admin-progress">
+                        <div class="progress-label">
+                            <strong>{{ \App\Models\Program::rupiah($program->raisedAmount()) }}</strong>
+                            <span>{{ $program->progressPercent() }}% dari {{ \App\Models\Program::rupiah($program->target_amount) }}</span>
+                        </div>
+                        <div class="progress">
+                            <i style="width: {{ $program->progressPercent() }}%;"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="program-admin-actions">
+                    <button class="btn btn-ghost btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#modalEditProgram{{ $program->id }}" aria-label="Edit {{ $program->title }}">
+                        <i class="bi bi-pencil"></i>
+                    </button>
+                    <form method="POST" action="{{ route('admin.programs.destroy', $program) }}" onsubmit="return confirm('Hapus program ini? Program yang memiliki riwayat donasi tidak dapat dihapus.')">
+                        @csrf
+                        @method('DELETE')
+                        <button class="btn btn-ghost btn-sm text-danger" type="submit" aria-label="Hapus {{ $program->title }}">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </form>
+                </div>
+            </article>
+        @empty
+            <p class="text-center p-4 mb-0">Belum ada program yang cocok dengan pencarian.</p>
+        @endforelse
     </div>
 
-    <!-- Program List -->
-    <div class="program-admin-list">
-        <div class="program-admin-item">
-            <div class="program-admin-img" style="background: linear-gradient(135deg, #e8f5f0, #d4f1e8);">
-                <i class="bi bi-book"></i>
-            </div>
-            <div class="program-admin-info">
-                <h4>Pendidikan untuk Anak Pelosok</h4>
-                <div class="program-admin-meta">
-                    <span class="badge-category">Pendidikan</span>
-                    <span><i class="bi bi-people"></i> 124 donatur</span>
-                    <span><i class="bi bi-calendar"></i> Dibuat 15 Jun 2025</span>
-                </div>
-                <div class="program-admin-progress">
-                    <div class="progress-label">
-                        <strong>Rp 84.750.000</strong>
-                        <span>71% dari Rp 120.000.000</span>
-                    </div>
-                    <div class="progress">
-                        <i style="width: 71%;"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="program-admin-actions">
-                <button class="btn btn-ghost btn-sm"><i class="bi bi-pencil"></i></button>
-                <button class="btn btn-ghost btn-sm"><i class="bi bi-eye"></i></button>
-                <button class="btn btn-ghost btn-sm text-danger"><i class="bi bi-trash"></i></button>
-            </div>
-        </div>
-
-        <div class="program-admin-item">
-            <div class="program-admin-img" style="background: linear-gradient(135deg, #fff3cd, #ffe69c);">
-                <i class="bi bi-basket"></i>
-            </div>
-            <div class="program-admin-info">
-                <h4>Paket Pangan Keluarga Prasejahtera</h4>
-                <div class="program-admin-meta">
-                    <span class="badge-category" style="background: #fff3cd; color: #856404;">Kemanusiaan</span>
-                    <span><i class="bi bi-people"></i> 89 donatur</span>
-                    <span><i class="bi bi-calendar"></i> Dibuat 10 Jun 2025</span>
-                </div>
-                <div class="program-admin-progress">
-                    <div class="progress-label">
-                        <strong>Rp 62.400.000</strong>
-                        <span>78% dari Rp 80.000.000</span>
-                    </div>
-                    <div class="progress">
-                        <i style="width: 78%;"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="program-admin-actions">
-                <button class="btn btn-ghost btn-sm"><i class="bi bi-pencil"></i></button>
-                <button class="btn btn-ghost btn-sm"><i class="bi bi-eye"></i></button>
-                <button class="btn btn-ghost btn-sm text-danger"><i class="bi bi-trash"></i></button>
-            </div>
-        </div>
-
-        <div class="program-admin-item">
-            <div class="program-admin-img" style="background: linear-gradient(135deg, #e3f2fd, #bbdefb);">
-                <i class="bi bi-heart-pulse"></i>
-            </div>
-            <div class="program-admin-info">
-                <h4>Layanan Kesehatan Desa</h4>
-                <div class="program-admin-meta">
-                    <span class="badge-category" style="background: #e3f2fd; color: #1976d2;">Kesehatan</span>
-                    <span><i class="bi bi-people"></i> 56 donatur</span>
-                    <span><i class="bi bi-calendar"></i> Dibuat 5 Jun 2025</span>
-                </div>
-                <div class="program-admin-progress">
-                    <div class="progress-label">
-                        <strong>Rp 37.500.000</strong>
-                        <span>50% dari Rp 75.000.000</span>
-                    </div>
-                    <div class="progress">
-                        <i style="width: 50%;"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="program-admin-actions">
-                <button class="btn btn-ghost btn-sm"><i class="bi bi-pencil"></i></button>
-                <button class="btn btn-ghost btn-sm"><i class="bi bi-eye"></i></button>
-                <button class="btn btn-ghost btn-sm text-danger"><i class="bi bi-trash"></i></button>
-            </div>
-        </div>
+    <div class="p-3">
+        {{ $programs->links() }}
     </div>
 </div>
 
-<!-- Modal Buat Program (sama seperti di dashboard) -->
 <div class="modal fade" id="modalBuatProgram" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content modal-program">
-            <button type="button" class="modal-close-btn" data-bs-dismiss="modal">
+            <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Tutup">
                 <i class="bi bi-x-lg"></i>
             </button>
             <div class="modal-program-header">
@@ -136,49 +103,109 @@
                 <h2>Buat Program Baru</h2>
                 <p>Lengkapi informasi utama program penggalangan dana.</p>
             </div>
-            <form>
+            <form method="POST" action="{{ route('admin.programs.store') }}">
+                @csrf
+                <input type="hidden" name="_form" value="program-create">
+                <input type="hidden" name="status" value="active">
                 <div class="form-group-custom">
-                    <label>Nama Program</label>
-                    <input type="text" class="form-control-custom" placeholder="Contoh: Bantuan Sekolah Pelosok">
-                </div>
-                <div class="form-row-custom">
-                    <div class="form-group-custom">
-                        <label>Kategori</label>
-                        <select class="form-control-custom">
-                            <option value="">Pilih kategori</option>
-                            <option>Pendidikan</option>
-                            <option>Kesehatan</option>
-                            <option>Kemanusiaan</option>
-                            <option>Lingkungan</option>
-                        </select>
-                    </div>
-                    <div class="form-group-custom">
-                        <label>Target Donasi</label>
-                        <div class="input-with-rp">
-                            <span class="rp-prefix">Rp</span>
-                            <input type="number" placeholder="0">
-                        </div>
-                    </div>
+                    <label for="create-title">Nama Program</label>
+                    <input id="create-title" type="text" name="title" class="form-control-custom" value="{{ old('_form') === 'program-create' ? old('title') : '' }}" required>
+                    @error('title') <small class="text-danger" role="alert">{{ $message }}</small> @enderror
                 </div>
                 <div class="form-group-custom">
-                    <label>Deskripsi Singkat</label>
-                    <textarea class="form-control-custom textarea-custom" placeholder="Jelaskan tujuan dan penerima manfaat program..."></textarea>
+                    <label for="create-category">Kategori</label>
+                    <input id="create-category" type="text" name="category" class="form-control-custom" value="{{ old('_form') === 'program-create' ? old('category') : '' }}" required>
+                    @error('category') <small class="text-danger" role="alert">{{ $message }}</small> @enderror
                 </div>
                 <div class="form-group-custom">
-                    <label>Foto Sampul</label>
-                    <div class="upload-area">
-                        <i class="bi bi-image"></i>
-                        <div>
-                            <strong>Unggah foto program</strong>
-                            <small>JPG atau PNG, maks. 5MB</small>
-                        </div>
-                    </div>
+                    <label for="create-target">Target Donasi (Rp)</label>
+                    <input id="create-target" type="number" name="target_amount" class="form-control-custom" value="{{ old('_form') === 'program-create' ? old('target_amount') : '' }}" min="10000" required>
+                    @error('target_amount') <small class="text-danger" role="alert">{{ $message }}</small> @enderror
                 </div>
-                <button type="submit" class="btn-submit-program">
-                    Simpan Program <i class="bi bi-plus"></i>
-                </button>
+                <div class="form-group-custom">
+                    <label for="create-image">URL Foto Sampul (opsional)</label>
+                    <input id="create-image" type="url" name="image" class="form-control-custom" value="{{ old('_form') === 'program-create' ? old('image') : '' }}">
+                    @error('image') <small class="text-danger" role="alert">{{ $message }}</small> @enderror
+                </div>
+                <div class="form-group-custom">
+                    <label for="create-description">Deskripsi</label>
+                    <textarea id="create-description" name="description" class="form-control-custom textarea-custom" required>{{ old('_form') === 'program-create' ? old('description') : '' }}</textarea>
+                    @error('description') <small class="text-danger" role="alert">{{ $message }}</small> @enderror
+                </div>
+                <button type="submit" class="btn-submit-program">Simpan Program <i class="bi bi-plus"></i></button>
             </form>
         </div>
     </div>
 </div>
+
+@foreach($programs as $program)
+    @php
+        $isEditError = old('_form') === 'program-edit' && (int) old('_program_id') === $program->id;
+    @endphp
+    <div class="modal fade" id="modalEditProgram{{ $program->id }}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content modal-program">
+                <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Tutup">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+                <div class="modal-program-header">
+                    <div class="modal-eyebrow">KELOLA PROGRAM</div>
+                    <h2>Edit Program</h2>
+                    <p>Perbarui informasi program donasi.</p>
+                </div>
+                <form method="POST" action="{{ route('admin.programs.update', $program) }}">
+                    @csrf
+                    @method('PUT')
+                    <input type="hidden" name="_form" value="program-edit">
+                    <input type="hidden" name="_program_id" value="{{ $program->id }}">
+                    <div class="form-group-custom">
+                        <label for="edit-title-{{ $program->id }}">Nama Program</label>
+                        <input id="edit-title-{{ $program->id }}" type="text" name="title" class="form-control-custom" value="{{ $isEditError ? old('title', $program->title) : $program->title }}" required>
+                        @if($isEditError) @error('title') <small class="text-danger" role="alert">{{ $message }}</small> @enderror @endif
+                    </div>
+                    <div class="form-group-custom">
+                        <label for="edit-category-{{ $program->id }}">Kategori</label>
+                        <input id="edit-category-{{ $program->id }}" type="text" name="category" class="form-control-custom" value="{{ $isEditError ? old('category', $program->category) : $program->category }}" required>
+                        @if($isEditError) @error('category') <small class="text-danger" role="alert">{{ $message }}</small> @enderror @endif
+                    </div>
+                    <div class="form-group-custom">
+                        <label for="edit-target-{{ $program->id }}">Target Donasi (Rp)</label>
+                        <input id="edit-target-{{ $program->id }}" type="number" name="target_amount" class="form-control-custom" value="{{ $isEditError ? old('target_amount', $program->target_amount) : $program->target_amount }}" min="10000" required>
+                        @if($isEditError) @error('target_amount') <small class="text-danger" role="alert">{{ $message }}</small> @enderror @endif
+                    </div>
+                    <div class="form-group-custom">
+                        <label for="edit-status-{{ $program->id }}">Status</label>
+                        <select id="edit-status-{{ $program->id }}" name="status" class="form-control-custom">
+                            <option value="active" @selected(($isEditError ? old('status', $program->status) : $program->status) === 'active')>Aktif</option>
+                            <option value="closed" @selected(($isEditError ? old('status', $program->status) : $program->status) === 'closed')>Ditutup</option>
+                        </select>
+                    </div>
+                    <div class="form-group-custom">
+                        <label for="edit-image-{{ $program->id }}">URL Foto Sampul (opsional)</label>
+                        <input id="edit-image-{{ $program->id }}" type="url" name="image" class="form-control-custom" value="{{ $isEditError ? old('image', $program->image) : $program->image }}">
+                        @if($isEditError) @error('image') <small class="text-danger" role="alert">{{ $message }}</small> @enderror @endif
+                    </div>
+                    <div class="form-group-custom">
+                        <label for="edit-description-{{ $program->id }}">Deskripsi</label>
+                        <textarea id="edit-description-{{ $program->id }}" name="description" class="form-control-custom textarea-custom" required>{{ $isEditError ? old('description', $program->description) : $program->description }}</textarea>
+                        @if($isEditError) @error('description') <small class="text-danger" role="alert">{{ $message }}</small> @enderror @endif
+                    </div>
+                    <button type="submit" class="btn-submit-program">Simpan Perubahan <i class="bi bi-check"></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
+@endforeach
+@endsection
+
+@section('scripts')
+    @if(old('_form') === 'program-create')
+        <script>
+            window.addEventListener('DOMContentLoaded', () => new bootstrap.Modal(document.getElementById('modalBuatProgram')).show());
+        </script>
+    @elseif(old('_form') === 'program-edit' && old('_program_id'))
+        <script>
+            window.addEventListener('DOMContentLoaded', () => new bootstrap.Modal(document.getElementById('modalEditProgram{{ (int) old('_program_id') }}')).show());
+        </script>
+    @endif
 @endsection

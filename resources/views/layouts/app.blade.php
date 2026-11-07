@@ -14,7 +14,7 @@
         <div class="navbar-inner">
             <a href="{{ route('home') }}" class="logo">
                 <span class="logo-mark"><i class="bi bi-heart-fill"></i></span>
-                PeduliLindungi<span class="logo-dot">.</span>
+                Peduli Lindungi</span>
             </a>
             <div class="nav-links">
                 <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Beranda</a>
@@ -30,7 +30,7 @@
                         <button class="btn btn-primary" type="submit">Logout</button>
                     </form>
                 @else
-                    <button class="btn btn-ghost" onclick="openModal('loginModal')">Login</button>
+                    <button class="btn btn-ghost" onclick="openModal('loginRoleModal')">Login</button>
                     <button class="btn btn-primary" onclick="openModal('registerModal')">Daftar</button>
                 @endauth
             </div>
@@ -38,6 +38,9 @@
     </nav>
 
     <main>
+        @if(session('success'))
+            <div class="wrap alert alert-success mt-3" role="status">{{ session('success') }}</div>
+        @endif
         @yield('content')
     </main>
 
@@ -48,9 +51,46 @@
                 PeduliLindungi<span class="logo-dot" style="color: var(--accent);">.</span>
             </div>
             <span>Menyalurkan kebaikan, menghadirkan harapan.</span>
-            <span>© 2025 PeduliLindungi Foundation</span>
+            <span>© 2026 Kelompok 5</span>
         </div>
     </footer>
+
+    <!-- MODAL PILIH PERAN LOGIN -->
+    <div class="modal-overlay" id="loginRoleModal">
+        <div class="modal-box role-modal" role="dialog" aria-modal="true" aria-labelledby="login-role-title">
+            <button class="modal-close" type="button" aria-label="Tutup" onclick="closeModal('loginRoleModal')">✕</button>
+            <div class="modal-header">
+                <div class="logo">
+                    <span class="logo-mark"><i class="bi bi-heart-fill"></i></span>
+                    PeduliLindungi<span class="logo-dot">.</span>
+                </div>
+                <div class="modal-eyebrow">MASUK KE AKUN ANDA</div>
+                <h2 id="login-role-title">Masuk sebagai siapa?</h2>
+                <p>Pilih jenis akun untuk melanjutkan.</p>
+            </div>
+            <div class="login-role-options">
+                <button class="login-role-option" type="button" onclick="selectLoginRole('admin')">
+                    <span class="login-role-icon"><i class="bi bi-shield-lock"></i></span>
+                    <span class="login-role-copy">
+                        <strong>Admin</strong>
+                        <small>Kelola program dan pantau donasi</small>
+                    </span>
+                    <i class="bi bi-arrow-right login-role-arrow" aria-hidden="true"></i>
+                </button>
+                <button class="login-role-option" type="button" onclick="selectLoginRole('donor')">
+                    <span class="login-role-icon"><i class="bi bi-heart"></i></span>
+                    <span class="login-role-copy">
+                        <strong>Donatur</strong>
+                        <small>Berbagi kebaikan dan lihat riwayat donasi</small>
+                    </span>
+                    <i class="bi bi-arrow-right login-role-arrow" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="modal-footer">
+                Belum punya akun?<a onclick="switchModal('loginRoleModal', 'registerModal')">Daftar sekarang</a>
+            </div>
+        </div>
+    </div>
 
         <!-- MODAL LOGIN -->
     <div class="modal-overlay" id="loginModal">
@@ -62,19 +102,19 @@
                     PeduliLindungi<span class="logo-dot">.</span>
                 </div>
                 <div class="modal-eyebrow">SELAMAT DATANG KEMBALI</div>
-                <h2>Masuk ke akun Anda</h2>
+                <h2>Masuk sebagai <span id="loginRoleLabel">{{ old('role') === 'admin' ? 'Admin' : 'Donatur' }}</span></h2>
                 <p>Masukkan email dan kata sandi yang telah terdaftar.</p>
             </div>
             <form method="POST" action="{{ route('login.process') }}">
                 @csrf
                 <input type="hidden" name="_form" value="login">
+                <input type="hidden" name="role" id="loginRoleInput" value="{{ old('role', 'donor') }}">
                 @if(old('_form') === 'login')
-                    @foreach($errors->all() as $error)
-                        <div class="alert alert-danger" role="alert">{{ $error }}</div>
-                    @endforeach
-                @endif
-                @if(session('success'))
-                    <div class="alert alert-success" role="status">{{ session('success') }}</div>
+                    <div id="loginErrors">
+                        @foreach($errors->all() as $error)
+                            <div class="alert alert-danger" role="alert">{{ $error }}</div>
+                        @endforeach
+                    </div>
                 @endif
                 <div class="form-group">
                     <label>Email</label>
@@ -90,7 +130,9 @@
                 <button type="submit" class="modal-btn">Masuk <i class="bi bi-arrow-right"></i></button>
             </form>
             <div class="modal-footer">
-                Belum punya akun?<a onclick="switchModal('loginModal', 'registerModal')">Daftar sekarang</a>
+                <a onclick="switchModal('loginModal', 'loginRoleModal')">Ganti jenis akun</a>
+                <span aria-hidden="true">·</span>
+                <a onclick="switchModal('loginModal', 'registerModal')">Daftar</a>
             </div>
         </div>
     </div>
@@ -138,7 +180,7 @@
             </form>
 
             <div class="modal-footer">
-                Sudah punya akun? <a onclick="switchModal('registerModal', 'loginModal')" style="font-weight: 700;">Masuk di sini</a>
+                Sudah punya akun? <a onclick="switchModal('registerModal', 'loginRoleModal')" style="font-weight: 700;">Masuk di sini</a>
             </div>
         </div>
     </div>
@@ -157,6 +199,26 @@
             closeModal(closeId);
             setTimeout(() => openModal(openId), 100);
         }
+        function selectLoginRole(role) {
+            const roles = {
+                admin: 'Admin',
+                donor: 'Donatur'
+            };
+            if (!Object.hasOwn(roles, role)) {
+                return;
+            }
+
+            const loginRoleInput = document.getElementById('loginRoleInput');
+            if (loginRoleInput.value !== role) {
+                document.getElementById('loginErrors')?.remove();
+                document.querySelector('#loginModal input[name="email"]').value = '';
+                document.querySelector('#loginModal input[name="password"]').value = '';
+            }
+
+            loginRoleInput.value = role;
+            document.getElementById('loginRoleLabel').textContent = roles[role];
+            switchModal('loginRoleModal', 'loginModal');
+        }
         document.querySelectorAll('.modal-overlay').forEach(overlay => {
             overlay.addEventListener('click', function(e) {
                 if (e.target === this) {
@@ -167,8 +229,10 @@
         });
         @if(session('open_modal'))
             window.addEventListener('DOMContentLoaded', () => openModal(@json(session('open_modal'))));
-        @elseif($errors->any())
+        @elseif(old('_form') === 'login' || old('_form') === 'register')
             window.addEventListener('DOMContentLoaded', () => openModal(@json(old('_form') === 'register' ? 'registerModal' : 'loginModal')));
+        @elseif(old('_form') === 'donation')
+            window.addEventListener('DOMContentLoaded', () => openModal('donasiModalProgram'));
         @endif
     </script>
 </body>

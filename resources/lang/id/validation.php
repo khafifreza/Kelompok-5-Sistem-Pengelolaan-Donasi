@@ -1,0 +1,40 @@
+<?php
+
+return [
+    'accepted' => ':attribute harus disetujui.',
+    'boolean' => ':attribute harus bernilai benar atau salah.',
+    'email' => 'Format :attribute tidak valid.',
+    'exists' => ':attribute yang dipilih tidak valid.',
+    'in' => ':attribute yang dipilih tidak valid.',
+    'integer' => ':attribute harus berupa bilangan bulat.',
+    'max' => [
+        'numeric' => ':attribute tidak boleh lebih dari :max.',
+        'string' => ':attribute tidak boleh lebih dari :max karakter.',
+    ],
+    'min' => [
+        'numeric' => ':attribute minimal :min.',
+        'string' => ':attribute minimal :min karakter.',
+    ],
+    'numeric' => ':attribute harus berupa angka.',
+    'regex' => 'Format :attribute tidak valid.',
+    'required' => ':attribute wajib diisi.',
+    'string' => ':attribute harus berupa teks.',
+    'unique' => ':attribute sudah terdaftar.',
+    'url' => 'Format :attribute harus berupa URL yang valid.',
+    'attributes' => [
+        'amount' => 'nominal',
+        'category' => 'kategori',
+        'description' => 'deskripsi',
+        'donor_email' => 'email donatur',
+        'donor_name' => 'nama donatur',
+        'email' => 'email',
+        'image' => 'URL foto',
+        'name' => 'nama',
+        'password' => 'kata sandi',
+        'phone' => 'nomor WhatsApp',
+        'role' => 'jenis akun',
+        'status' => 'status',
+        'target_amount' => 'target donasi',
+        'title' => 'nama program',
+    ],
+];

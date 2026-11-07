@@ -12,7 +12,7 @@ class AuthController extends Controller
     // Rute GET tetap ada (dipakai middleware `auth`) dan mengarahkan ke beranda.
     public function showLogin()
     {
-        return redirect()->route('home')->with('open_modal', 'loginModal');
+        return redirect()->route('home')->with('open_modal', 'loginRoleModal');
     }
 
     public function processLogin(Request $request)
@@ -20,12 +20,16 @@ class AuthController extends Controller
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required', 'string'],
+            'role' => ['required', 'in:admin,donor'],
+        ], [
+            'role.required' => 'Pilih jenis akun untuk masuk.',
+            'role.in' => 'Jenis akun yang dipilih tidak valid.',
         ]);
 
         if (! Auth::attempt($credentials, $request->boolean('remember'))) {
             return back()
-                ->withErrors(['email' => 'Email atau kata sandi salah.'])
-                ->onlyInput('email')
+                ->withErrors(['email' => 'Email, kata sandi, atau jenis akun salah.'])
+                ->onlyInput('email', 'role', '_form')
                 ->with('open_modal', 'loginModal');
         }
 
@@ -60,7 +64,7 @@ class AuthController extends Controller
 
         return redirect()
             ->route('home')
-            ->with('open_modal', 'loginModal')
+            ->with('open_modal', 'loginRoleModal')
             ->with('success', 'Pendaftaran berhasil. Silakan masuk dengan akun Anda.');
     }
 

@@ -22,7 +22,7 @@ class AuthFlowTest extends TestCase
             ...$credentials,
             'phone' => '081234567890',
         ])->assertRedirect(route('home'))
-            ->assertSessionHas('open_modal', 'loginModal')
+            ->assertSessionHas('open_modal', 'loginRoleModal')
             ->assertSessionHas('success', 'Pendaftaran berhasil. Silakan masuk dengan akun Anda.');
 
         $this->assertGuest();
@@ -30,7 +30,7 @@ class AuthFlowTest extends TestCase
             ->assertOk()
             ->assertSee('Pendaftaran berhasil. Silakan masuk dengan akun Anda.');
 
-        $this->post(route('login.process'), $credentials)
+        $this->post(route('login.process'), [...$credentials, 'role' => User::ROLE_DONOR])
             ->assertRedirect(route('dashboard'));
 
         $this->assertAuthenticated();
@@ -57,14 +57,46 @@ class AuthFlowTest extends TestCase
             'password' => 'Password123!',
         ]);
 
+        $this->get(route('login'))
+            ->assertRedirect(route('home'))
+            ->assertSessionHas('open_modal', 'loginRoleModal');
+
+        $this->get(route('home'))
+            ->assertOk()
+            ->assertSee('Masuk sebagai siapa?')
+            ->assertSee('Kelola program dan pantau donasi')
+            ->assertSee('Berbagi kebaikan dan lihat riwayat donasi');
+
         $this->post(route('login.process'), [
             'email' => $user->email,
             'password' => 'Password123!',
+            'role' => User::ROLE_ADMIN,
         ])->assertRedirect(route('admin.dashboard'));
 
         $this->get(route('admin.dashboard'))
             ->assertOk()
             ->assertSee('Selamat datang, Admin Demo')
             ->assertSee(route('logout'), false);
+    }
+
+    public function test_login_rejects_an_account_that_does_not_match_the_selected_role(): void
+    {
+        $user = User::factory()->create([
+            'role' => User::ROLE_DONOR,
+            'password' => 'Password123!',
+        ]);
+
+        $this->from(route('home'))
+            ->post(route('login.process'), [
+                'email' => $user->email,
+                'password' => 'Password123!',
+                'role' => User::ROLE_ADMIN,
+            ])
+            ->assertRedirect(route('home'))
+            ->assertSessionHasErrors('email')
+            ->assertSessionHas('open_modal', 'loginModal')
+            ->assertSessionHas('_old_input.role', User::ROLE_ADMIN);
+
+        $this->assertGuest();
     }
 }

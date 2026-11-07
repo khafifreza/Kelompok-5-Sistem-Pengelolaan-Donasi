@@ -28,7 +28,7 @@
 
     <div class="hero-visual">
         <div class="hero-shape"></div>
-        <img src="https://images.unsplash.com/photo-1720238281687-dcc6d8a6e7d4?auto=format&fit=crop&w=800&q=85" alt="Relawan">
+        <img src="https://cdn.setneg.go.id/_multimedia/photo/20260816/1959WhatsApp_Image_2026-08-16_at_5.49.26_PM.jpeg">
     
         <div class="floating-card safe-card">
             <i class="bi bi-shield-check"></i>

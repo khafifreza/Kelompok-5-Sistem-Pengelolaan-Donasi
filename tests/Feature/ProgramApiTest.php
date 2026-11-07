@@ -57,7 +57,14 @@ class ProgramApiTest extends TestCase
 
         $this->getJson("/api/programs/{$closedProgram->id}")
             ->assertNotFound()
-            ->assertJsonStructure(['message']);
+            ->assertJsonPath('message', 'Data atau endpoint tidak ditemukan.');
+    }
+
+    public function test_not_found_api_response_is_json_without_an_accept_header(): void
+    {
+        $this->get('/api/programs/9999')
+            ->assertNotFound()
+            ->assertJsonPath('message', 'Data atau endpoint tidak ditemukan.');
     }
 
     /**
