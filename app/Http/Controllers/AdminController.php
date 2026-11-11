@@ -10,6 +10,8 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class AdminController extends Controller
 {
@@ -139,14 +141,34 @@ class AdminController extends Controller
 
     public function storeProgram(ProgramRequest $request): RedirectResponse
     {
-        Program::create($request->validated());
+        $validated = $request->validated();
+        unset($validated['image']);
+
+        if ($request->hasFile('image')) {
+            $validated['image'] = $request->file('image')->store('programs', 'public');
+        }
+
+        Program::create($validated);
 
         return back()->with('success', 'Program berhasil dibuat.');
     }
 
     public function updateProgram(ProgramRequest $request, Program $program): RedirectResponse
     {
-        $program->update($request->validated());
+        $validated = $request->validated();
+        unset($validated['image']);
+
+        if ($request->hasFile('image')) {
+            $previousImage = $program->getRawOriginal('image');
+            $validated['image'] = $request->file('image')->store('programs', 'public');
+            $program->update($validated);
+
+            if ($previousImage && ! Str::startsWith($previousImage, ['http://', 'https://'])) {
+                Storage::disk('public')->delete($previousImage);
+            }
+        } else {
+            $program->update($validated);
+        }
 
         return back()->with('success', 'Program berhasil diperbarui.');
     }

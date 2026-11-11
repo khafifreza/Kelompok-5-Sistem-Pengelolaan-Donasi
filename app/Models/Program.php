@@ -6,11 +6,14 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 #[Fillable(['title', 'category', 'description', 'image', 'target_amount', 'status'])]
 class Program extends Model
 {
     public const STATUS_ACTIVE = 'active';
+
     public const STATUS_CLOSED = 'closed';
 
     protected function casts(): array
@@ -58,6 +61,19 @@ class Program extends Model
         return (int) min(100, round($this->raisedAmount() / $this->target_amount * 100));
     }
 
+    public function imageUrl(): ?string
+    {
+        $image = $this->getRawOriginal('image');
+
+        if (! $image) {
+            return null;
+        }
+
+        return Str::startsWith($image, ['http://', 'https://'])
+            ? $image
+            : Storage::disk('public')->url($image);
+    }
+
     public static function rupiah(int|float $number): string
     {
         return 'Rp '.number_format($number, 0, ',', '.');
@@ -76,7 +92,7 @@ class Program extends Model
             'progress' => $this->progressPercent(),
             'raised' => self::rupiah($this->raisedAmount()),
             'target' => self::rupiah($this->target_amount),
-            'image' => $this->image,
+            'image' => $this->imageUrl(),
         ];
     }
 

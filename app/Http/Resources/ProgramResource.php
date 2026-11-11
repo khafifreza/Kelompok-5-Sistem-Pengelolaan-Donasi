@@ -18,7 +18,7 @@ class ProgramResource extends JsonResource
             'title' => $this->title,
             'category' => $this->category,
             'description' => $this->description,
-            'image' => $this->image,
+            'image' => $this->imageUrl(),
             'target_amount' => $this->target_amount,
             'raised_amount' => $this->raisedAmount(),
             'status' => $this->status,
