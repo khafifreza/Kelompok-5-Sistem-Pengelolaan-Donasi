@@ -113,6 +113,7 @@ class DonationBackendTest extends TestCase
     {
         $admin = User::factory()->create(['role' => User::ROLE_ADMIN]);
         $programData = $this->programData();
+        unset($programData['image']);
         unset($programData['status']);
 
         $this->actingAs($admin)

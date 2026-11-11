@@ -38,6 +38,7 @@ class ProgramApiTest extends TestCase
             ->assertJsonCount(1, 'data')
             ->assertJsonPath('data.0.id', $program->id)
             ->assertJsonPath('data.0.title', $program->title)
+            ->assertJsonPath('data.0.image', 'https://example.com/program.jpg')
             ->assertJsonPath('data.0.target_amount', 120000000)
             ->assertJsonPath('data.0.raised_amount', 50000);
     }

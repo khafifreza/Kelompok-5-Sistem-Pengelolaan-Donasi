@@ -42,8 +42,8 @@
         @forelse($programs as $program)
             <article class="program-admin-item">
                 <div class="program-admin-img">
-                    @if($program->image)
-                        <img src="{{ $program->image }}" alt="" style="width: 100%; height: 100%; object-fit: cover;">
+                    @if($program->imageUrl())
+                        <img src="{{ $program->imageUrl() }}" alt="" style="width: 100%; height: 100%; object-fit: cover;">
                     @else
                         <i class="bi bi-heart"></i>
                     @endif
@@ -103,7 +103,7 @@
                 <h2>Buat Program Baru</h2>
                 <p>Lengkapi informasi utama program penggalangan dana.</p>
             </div>
-            <form method="POST" action="{{ route('admin.programs.store') }}">
+            <form method="POST" action="{{ route('admin.programs.store') }}" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="_form" value="program-create">
                 <input type="hidden" name="status" value="active">
@@ -123,8 +123,8 @@
                     @error('target_amount') <small class="text-danger" role="alert">{{ $message }}</small> @enderror
                 </div>
                 <div class="form-group-custom">
-                    <label for="create-image">URL Foto Sampul (opsional)</label>
-                    <input id="create-image" type="url" name="image" class="form-control-custom" value="{{ old('_form') === 'program-create' ? old('image') : '' }}">
+                    <label for="create-image">Foto Sampul (opsional, maksimal 5 MB)</label>
+                    <input id="create-image" type="file" name="image" class="form-control-custom" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
                     @error('image') <small class="text-danger" role="alert">{{ $message }}</small> @enderror
                 </div>
                 <div class="form-group-custom">
@@ -153,7 +153,7 @@
                     <h2>Edit Program</h2>
                     <p>Perbarui informasi program donasi.</p>
                 </div>
-                <form method="POST" action="{{ route('admin.programs.update', $program) }}">
+                <form method="POST" action="{{ route('admin.programs.update', $program) }}" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <input type="hidden" name="_form" value="program-edit">
@@ -181,8 +181,11 @@
                         </select>
                     </div>
                     <div class="form-group-custom">
-                        <label for="edit-image-{{ $program->id }}">URL Foto Sampul (opsional)</label>
-                        <input id="edit-image-{{ $program->id }}" type="url" name="image" class="form-control-custom" value="{{ $isEditError ? old('image', $program->image) : $program->image }}">
+                        <label for="edit-image-{{ $program->id }}">Ganti Foto Sampul (opsional, maksimal 5 MB)</label>
+                        @if($program->imageUrl())
+                            <img src="{{ $program->imageUrl() }}" alt="Foto sampul {{ $program->title }}" style="display: block; width: 100%; max-height: 180px; object-fit: cover; margin-bottom: 8px;">
+                        @endif
+                        <input id="edit-image-{{ $program->id }}" type="file" name="image" class="form-control-custom" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
                         @if($isEditError) @error('image') <small class="text-danger" role="alert">{{ $message }}</small> @enderror @endif
                     </div>
                     <div class="form-group-custom">
