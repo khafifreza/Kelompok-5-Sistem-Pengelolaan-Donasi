@@ -13,11 +13,57 @@
 ## Backend Donasi
 
 Backend menyimpan akun donatur, program, dan transaksi donasi di database. Untuk
-membuat tabel dan mengisi program awal:
+menggunakan proyek secara lokal, clone repositori lalu jalankan perintah berikut
+dari PowerShell:
 
-```bash
-php artisan migrate --seed
+```powershell
+git clone https://github.com/khafifreza/Kelompok-5-Sistem-Pengelolaan-Donasi.git
+Set-Location Kelompok-5-Sistem-Pengelolaan-Donasi
+
+if (-not (Test-Path .env)) {
+    Copy-Item .env.example .env
+}
+
+composer install
+
+if (-not (Test-Path database\database.sqlite)) {
+    New-Item -ItemType File -Path database\database.sqlite | Out-Null
+}
+
+php artisan key:generate
+php artisan migrate
 ```
+
+Jika ingin mengisi data contoh, jalankan seeder:
+
+```powershell
+php artisan db:seed
+```
+
+Jangan commit file `.env` karena berisi konfigurasi lokal. Sesuaikan nilainya
+sendiri jika memakai database selain SQLite.
+
+### ERD Database
+
+![ERD Sistem Pengelolaan Donasi](docs/erd.svg)
+
+ERD inti terdiri dari tiga tabel:
+
+- `users` menyimpan akun donatur dan admin.
+- `programs` menyimpan program penggalangan dana.
+- `donations` menyimpan transaksi dan menghubungkan program dengan donatur.
+
+Satu `program` dapat memiliki banyak `donations`, tetapi setiap donasi wajib
+terhubung ke satu program. Karena donasi tamu diperbolehkan, `donations.user_id`
+bersifat nullable; satu pengguna dapat memiliki nol atau banyak donasi.
+Penghapusan pengguna akan mengosongkan `user_id` pada donasinya (`SET NULL`),
+sedangkan program yang masih memiliki donasi tidak dapat dihapus (`RESTRICT`).
+Nama dan email donatur disimpan pada transaksi agar riwayat donasi tetap
+mempertahankan data saat transaksi dibuat.
+
+Tabel pendukung Laravel seperti cache, queue, sesi, dan reset password tidak
+memiliki relasi foreign key domain pada ERD ini. Lihat [tabel dan relasi
+database](docs/database-relations.md) untuk rincian kolom dan indeks.
 
 Donasi baru berstatus `pending`. Admin yang sudah login dapat mengubahnya menjadi
 `success` atau `failed`; konfirmasi pembayaran otomatis mencatat waktu `paid_at`.
@@ -31,6 +77,42 @@ php artisan tinker --execute="App\Models\User::where('email', 'admin@example.com
 Rute dashboard donatur memerlukan login. Semua rute di bawah `/admin` memerlukan
 login dan peran admin. Integrasi payment gateway belum tersedia; status donasi
 perlu diperbarui oleh admin.
+
+## Alur Branch, Pull Request, dan Merge
+
+Mulai dari branch `main` terbaru, lalu buat branch khusus untuk setiap perubahan.
+Gunakan awalan `feature/` untuk fitur atau `fix/` untuk perbaikan:
+
+```bash
+git switch main
+git pull --ff-only origin main
+git switch -c feature/nama-perubahan
+```
+
+Setelah perubahan selesai, jalankan pemeriksaan yang sesuai, lalu commit dan
+push branch tersebut:
+
+```bash
+git status
+git add <file-yang-diubah>
+git commit -m "Jelaskan perubahan"
+git push -u origin feature/nama-perubahan
+```
+
+Di GitHub, buat Pull Request dengan branch tujuan (`base`) `main` dan branch
+perubahan (`compare`) yang baru saja di-push. Jelaskan tujuan perubahan, cara
+menguji, serta hasil pemeriksaan. Tanggapi masukan reviewer dan pastikan
+pemeriksaan wajib lulus sebelum merge. Jika ada konflik, selesaikan di branch
+perubahan, jalankan ulang pemeriksaan, lalu push kembali.
+
+Setelah Pull Request di-merge sesuai kebijakan tim, perbarui branch lokal dan
+hapus branch kerja yang sudah selesai:
+
+```bash
+git switch main
+git pull --ff-only origin main
+git branch -d feature/nama-perubahan
+```
 
 ## About Laravel
 
