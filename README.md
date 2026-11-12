@@ -48,20 +48,28 @@ sendiri jika memakai database selain SQLite.
 Masalah kegagalan migrasi akibat kolom `phone` dan `role` yang ditambahkan lebih
 dari sekali telah diperbaiki. Struktur role diselaraskan dengan aplikasi
 (`donor` dan `admin`), dan seeder akun demo dirapikan agar dapat dijalankan
-berulang kali. Pengujian database terkait lulus: 24 tes dengan 162 assertion.
+berulang kali. Pengujian database terkait lulus: 30 tes dengan 194 assertion.
 
 **Penyelesaian:** Maftuh Khayatunnufus.
+
+### Status Pemeriksaan Database Terbaru
+
+- **Waktu pemeriksaan:** 12 November 2026, 07:59:27 WIB (UTC+07:00).
+- **Database:** SQLite lokal.
+- **Migrasi:** 8 dari 8 berstatus `Ran`; tidak ada migrasi tertunda.
+- **Tes:** `php artisan test --compact tests\Feature` lulus, 30 tes dan 194 assertion.
 
 ### Tabel Kontribusi Database
 
 | NIM | Nama | Bagian | Jumlah commit | Kontribusi dan hasil |
 | --- | --- | --- | ---: | --- |
-| 25170012 | Maftu Khayatunnufus | DATABASE | 7 commit perubahan (24 commit tercatat di Git*) | Memperbaiki dengan sangat baik masalah fatal migrasi `duplicate column name: phone`, menyelaraskan role `donor/admin`, dan merapikan seeder demo. Pemeriksaan menggunakan `php artisan test`: 24 tes database lulus dengan 162 assertion. |
+| 25170012 | Maftuh Khayatunnufus | DATABASE | 7 commit perubahan (24 commit tercatat di Git*) | Memperbaiki dengan sangat baik masalah fatal migrasi `duplicate column name: phone`, menyelaraskan role `donor/admin`, dan merapikan seeder demo. Pemeriksaan menggunakan `php artisan test`: 30 tes dan 194 assertion lulus. |
 
 *Jumlah dihitung dari riwayat semua branch dengan menggabungkan variasi nama
 author Maftu/Maftuh dan alias terkait. Dari 24 commit tercatat, 17 merupakan
 commit checkpoint/sesi otomatis; jumlah commit perubahan kode atau dokumentasi
-adalah 7. Tes non-database tidak termasuk dalam hasil pengujian di atas.*
+adalah 7. Tes unit yang tidak menggunakan database tidak termasuk dalam hasil
+pengujian di atas.*
 
 ### ERD Database
 
