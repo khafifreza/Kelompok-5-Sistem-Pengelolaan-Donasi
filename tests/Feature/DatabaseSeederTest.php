@@ -20,15 +20,16 @@ class DatabaseSeederTest extends TestCase
         $admin = User::where('email', 'admin@example.com')->firstOrFail();
 
         $this->assertDatabaseCount('users', 2);
-        $this->assertSame('user', $user->role);
-        $this->assertSame('admin', $admin->role);
+        $this->assertSame(User::ROLE_DONOR, $user->role);
+        $this->assertSame(User::ROLE_ADMIN, $admin->role);
         $this->assertTrue(Hash::check('DemoPass123!', $user->password));
         $this->assertTrue(Hash::check('DemoPass123!', $admin->password));
 
         $this->post(route('login.process'), [
             'email' => 'user@example.com',
             'password' => 'DemoPass123!',
-        ])->assertRedirect(route('home'));
+            'role' => User::ROLE_DONOR,
+        ])->assertRedirect(route('dashboard'));
         $this->assertAuthenticatedAs($user);
 
         $this->post(route('logout'))->assertRedirect(route('home'));
@@ -36,7 +37,8 @@ class DatabaseSeederTest extends TestCase
         $this->post(route('login.process'), [
             'email' => 'admin@example.com',
             'password' => 'DemoPass123!',
-        ])->assertRedirect(route('home'));
+            'role' => User::ROLE_ADMIN,
+        ])->assertRedirect(route('admin.dashboard'));
         $this->assertAuthenticatedAs($admin);
     }
 }

@@ -21,16 +21,10 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Demo User',
                 'phone' => '081234567890',
-                'role' => 'user',
+                'role' => User::ROLE_DONOR,
                 'password' => 'DemoPass123!',
             ],
         );
-
-<<<<<<< HEAD
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
 
         foreach ([
             [
@@ -60,7 +54,7 @@ class DatabaseSeeder extends Seeder
                 $program + ['status' => Program::STATUS_ACTIVE],
             );
         }
-=======
+
         User::updateOrCreate(
             ['email' => 'admin@example.com'],
             [
@@ -70,6 +64,5 @@ class DatabaseSeeder extends Seeder
                 'password' => 'DemoPass123!',
             ],
         );
->>>>>>> 6d5f733fc120634abe6fc415774effda697c01a7
     }
 }

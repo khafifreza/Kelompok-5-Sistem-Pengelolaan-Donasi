@@ -1,23 +1,14 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up(): void
-    {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('phone')->nullable();
-            $table->enum('role', ['user', 'admin'])->default('user');
-        });
-    }
+    /**
+     * This legacy migration duplicates the later canonical users migration.
+     * Keep it as a no-op because some databases may already have recorded it.
+     */
+    public function up(): void {}
 
-    public function down(): void
-    {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn(['phone', 'role']);
-        });
-    }
+    public function down(): void {}
 };
