@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1360" height="980" viewBox="0 0 1360 980" role="img" aria-labelledby="title description">
+  <title id="title">ERD Sistem Pengelolaan Donasi</title>
+  <desc id="description">Diagram relasi users, donations, dan programs beserta tabel pendukung Laravel.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#64748b"/>
+    </marker>
+    <style>
+      .background { fill: #f8fafc; }
+      .title { fill: #0f172a; font: 700 30px Arial, sans-serif; }
+      .subtitle { fill: #475569; font: 16px Arial, sans-serif; }
+      .card { fill: #ffffff; stroke: #cbd5e1; stroke-width: 2; }
+      .header { fill: #0f766e; }
+      .header-text { fill: #ffffff; font: 700 20px Arial, sans-serif; }
+      .field { fill: #1e293b; font: 14px Consolas, monospace; }
+      .key { fill: #0f766e; font-weight: 700; }
+      .relation { stroke: #64748b; stroke-width: 2.5; fill: none; }
+      .relation-label { fill: #334155; font: 700 14px Arial, sans-serif; }
+      .note-card { fill: #ecfeff; stroke: #99f6e4; stroke-width: 1.5; }
+      .note-title { fill: #115e59; font: 700 17px Arial, sans-serif; }
+      .note-text { fill: #334155; font: 14px Arial, sans-serif; }
+    </style>
+  </defs>
+
+  <rect class="background" width="1360" height="980"/>
+  <text class="title" x="48" y="58">ERD Sistem Pengelolaan Donasi</text>
+  <text class="subtitle" x="48" y="88">Skema domain berdasarkan migrasi dan database SQLite proyek</text>
+
+  <g aria-label="users table">
+    <rect class="card" x="45" y="165" width="350" height="420" rx="12"/>
+    <path class="header" d="M57 165 H383 Q395 165 395 177 V215 H45 V177 Q45 165 57 165 Z"/>
+    <text class="header-text" x="66" y="197">users</text>
+    <text class="field" x="66" y="250"><tspan class="key">PK</tspan><tspan> id : integer</tspan></text>
+    <text class="field" x="66" y="281">name : varchar</text>
+    <text class="field" x="66" y="312"><tspan class="key">UQ</tspan><tspan> email : varchar</tspan></text>
+    <text class="field" x="66" y="343">phone : varchar(20), nullable</text>
+    <text class="field" x="66" y="374">role : varchar(20), default donor</text>
+    <text class="field" x="66" y="405">password : varchar</text>
+    <text class="field" x="66" y="436">email_verified_at : timestamp, nullable</text>
+    <text class="field" x="66" y="467">remember_token : varchar, nullable</text>
+    <text class="field" x="66" y="498">created_at : timestamp, nullable</text>
+    <text class="field" x="66" y="529">updated_at : timestamp, nullable</text>
+  </g>
+
+  <g aria-label="donations table">
+    <rect class="card" x="480" y="145" width="400" height="500" rx="12"/>
+    <path class="header" d="M492 145 H868 Q880 145 880 157 V195 H480 V157 Q480 145 492 145 Z"/>
+    <text class="header-text" x="501" y="177">donations</text>
+    <text class="field" x="501" y="230"><tspan class="key">PK</tspan><tspan> id : integer</tspan></text>
+    <text class="field" x="501" y="260"><tspan class="key">FK</tspan><tspan> program_id : integer, required</tspan></text>
+    <text class="field" x="501" y="290"><tspan class="key">FK</tspan><tspan> user_id : integer, nullable</tspan></text>
+    <text class="field" x="501" y="320"><tspan class="key">UQ</tspan><tspan> invoice : varchar</tspan></text>
+    <text class="field" x="501" y="350">donor_name : varchar</text>
+    <text class="field" x="501" y="380">donor_email : varchar, nullable</text>
+    <text class="field" x="501" y="410">amount : unsigned big integer</text>
+    <text class="field" x="501" y="440">message : text, nullable</text>
+    <text class="field" x="501" y="470">is_anonymous : boolean, default false</text>
+    <text class="field" x="501" y="500">status : varchar(20), default pending</text>
+    <text class="field" x="501" y="530">paid_at : timestamp, nullable</text>
+    <text class="field" x="501" y="560">created_at : timestamp, nullable</text>
+    <text class="field" x="501" y="590">updated_at : timestamp, nullable</text>
+  </g>
+
+  <g aria-label="programs table">
+    <rect class="card" x="965" y="165" width="350" height="360" rx="12"/>
+    <path class="header" d="M977 165 H1303 Q1315 165 1315 177 V215 H965 V177 Q965 165 977 165 Z"/>
+    <text class="header-text" x="986" y="197">programs</text>
+    <text class="field" x="986" y="250"><tspan class="key">PK</tspan><tspan> id : integer</tspan></text>
+    <text class="field" x="986" y="281">title : varchar</text>
+    <text class="field" x="986" y="312">category : varchar(100)</text>
+    <text class="field" x="986" y="343">description : text</text>
+    <text class="field" x="986" y="374">image : varchar(2048), nullable</text>
+    <text class="field" x="986" y="405">target_amount : unsigned bigint</text>
+    <text class="field" x="986" y="436">status : varchar, default active</text>
+    <text class="field" x="986" y="467">created_at : timestamp, nullable</text>
+    <text class="field" x="986" y="498">updated_at : timestamp, nullable</text>
+  </g>
+
+  <path class="relation" d="M395 355 H472" marker-end="url(#arrow)"/>
+  <text class="relation-label" x="398" y="340">1</text>
+  <text class="relation-label" x="445" y="340">0..*</text>
+  <path class="relation" d="M965 435 H888" marker-end="url(#arrow)"/>
+  <text class="relation-label" x="936" y="420">1</text>
+  <text class="relation-label" x="890" y="420">0..*</text>
+
+  <rect class="note-card" x="45" y="700" width="1270" height="210" rx="12"/>
+  <text class="note-title" x="70" y="738">Relasi utama</text>
+  <text class="note-text" x="70" y="773">users 1 ke 0..* donations; donations.user_id nullable, ON DELETE SET NULL.</text>
+  <text class="note-text" x="70" y="801">programs 1 ke 0..* donations; donations.program_id wajib, ON DELETE RESTRICT.</text>
+  <text class="note-title" x="70" y="846">Tabel pendukung Laravel (tanpa relasi domain pada ERD)</text>
+  <text class="note-text" x="70" y="877">cache, cache_locks, failed_jobs, job_batches, jobs, migrations, password_reset_tokens, sessions</text>
+</svg>

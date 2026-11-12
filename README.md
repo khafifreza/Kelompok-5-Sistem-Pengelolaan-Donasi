@@ -132,6 +132,17 @@ Laravel, is a web application framework with expressive, elegant syntax. We beli
 <!-- Laravel menyediakan berbagai fitur untuk membangun aplikasi berskala kecil hingga besar -->
 Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
+## Akun Demo
+
+Jalankan seeder lokal dengan `php artisan migrate --seed`. Seeder membuat akun berikut:
+
+| Role | Email | Kata sandi |
+|---|---|---|
+| User | `user@example.com` | `DemoPass123!` |
+| Admin | `admin@example.com` | `DemoPass123!` |
+
+Akun ini hanya untuk demo/pengembangan. Jangan gunakan kredensial demo di produksi.
+
 ## Learning Laravel
 
 <!-- Bagian ini berisi referensi pembelajaran Laravel melalui dokumentasi resmi dan platform tutorial -->
