@@ -43,6 +43,26 @@ php artisan db:seed
 Jangan commit file `.env` karena berisi konfigurasi lokal. Sesuaikan nilainya
 sendiri jika memakai database selain SQLite.
 
+### Pembaruan dan Perbaikan Database
+
+Masalah kegagalan migrasi akibat kolom `phone` dan `role` yang ditambahkan lebih
+dari sekali telah diperbaiki. Struktur role diselaraskan dengan aplikasi
+(`donor` dan `admin`), dan seeder akun demo dirapikan agar dapat dijalankan
+berulang kali. Pengujian database terkait lulus: 24 tes dengan 162 assertion.
+
+**Penyelesaian:** Maftuh Khayatunnufus.
+
+### Tabel Kontribusi Database
+
+| NIM | Nama | Bagian | Jumlah commit | Kontribusi dan hasil |
+| --- | --- | --- | ---: | --- |
+| 25170012 | Maftuh Khayatunnufus | DATABASE | 7 commit perubahan (24 commit tercatat di Git*) | Memperbaiki dengan sangat baik masalah fatal migrasi `duplicate column name: phone`, menyelaraskan role `donor/admin`, dan merapikan seeder demo. Pemeriksaan menggunakan `php artisan test`: 24 tes database lulus dengan 162 assertion. |
+
+*Jumlah dihitung dari riwayat semua branch dengan menggabungkan variasi nama
+author Maftu/Maftuh dan alias terkait. Dari 24 commit tercatat, 17 merupakan
+commit checkpoint/sesi otomatis; jumlah commit perubahan kode atau dokumentasi
+adalah 7. Tes non-database tidak termasuk dalam hasil pengujian di atas.*
+
 ### ERD Database
 
 ![ERD Sistem Pengelolaan Donasi](docs/erd.svg)
