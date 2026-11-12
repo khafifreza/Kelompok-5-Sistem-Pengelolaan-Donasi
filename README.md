@@ -56,7 +56,7 @@ berulang kali. Pengujian database terkait lulus: 24 tes dengan 162 assertion.
 
 | NIM | Nama | Bagian | Jumlah commit | Kontribusi dan hasil |
 | --- | --- | --- | ---: | --- |
-| 25170012 | Maftuh Khayatunnufus | DATABASE | 7 commit perubahan (24 commit tercatat di Git*) | Memperbaiki dengan sangat baik masalah fatal migrasi `duplicate column name: phone`, menyelaraskan role `donor/admin`, dan merapikan seeder demo. Pemeriksaan menggunakan `php artisan test`: 24 tes database lulus dengan 162 assertion. |
+| 25170012 | Maftu Khayatunnufus | DATABASE | 7 commit perubahan (24 commit tercatat di Git*) | Memperbaiki dengan sangat baik masalah fatal migrasi `duplicate column name: phone`, menyelaraskan role `donor/admin`, dan merapikan seeder demo. Pemeriksaan menggunakan `php artisan test`: 24 tes database lulus dengan 162 assertion. |
 
 *Jumlah dihitung dari riwayat semua branch dengan menggabungkan variasi nama
 author Maftu/Maftuh dan alias terkait. Dari 24 commit tercatat, 17 merupakan
